@@ -19,7 +19,9 @@ def download():
 
     cmd = [
         "yt-dlp",
-        "-f", "bestvideo+bestaudio/best",
+        "-f", "bv*+ba/best[ext=mp4]",
+        "--merge-output-format", "mp4",
+        "--no-part",
         url,
         "-o", f"{DOWNLOAD_DIR}/%(title)s.%(ext)s"
     ]
