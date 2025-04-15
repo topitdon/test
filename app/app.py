@@ -1,8 +1,11 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import subprocess
 import os
 
 app = Flask(__name__)
+# ✅ สำหรับแบบปลอดภัย: ระบุ extension origin โดยตรง
+CORS(app, origins=["chrome-extension://ehjcafcgkaehoaakilgamgamnalgahhl"])
 DOWNLOAD_DIR = "/app/downloads"
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
