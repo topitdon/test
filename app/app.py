@@ -19,23 +19,35 @@ def home():
 def download():
     data = request.get_json()
     url = data.get("url")
+    fmt = data.get("format", "mp4")  # default เป็น mp4
+
     if not url:
         return jsonify({"error": "Missing URL"}), 400
 
-    cmd = [
-        "yt-dlp",
-        "-f", "bv*+ba/best[ext=mp4]",
-        "--merge-output-format", "mp4",
-        "--no-part",
-        url,
-        "-o", f"{DOWNLOAD_DIR}/%(title)s.%(ext)s"
-    ]
+    filename_template = f"{DOWNLOAD_DIR}/%(title)s.%(ext)s"
 
-    try:
-        subprocess.Popen(cmd)
-        return jsonify({"status": "Started"}), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    if fmt == "mp3":
+        cmd = [
+            "yt-dlp",
+            "-f", "bestaudio",
+            "--extract-audio",
+            "--audio-format", "mp3",
+            "-o", filename_template,
+            url
+        ]
+    else:
+        cmd = [
+            "yt-dlp",
+            "-f", "bv*+ba/best",
+            "--merge-output-format", "mp4",
+            "--no-part",
+            "-o", filename_template,
+            url
+        ]
+
+    subprocess.Popen(cmd)
+    return jsonify({"status": "download started", "format": fmt})
+
 
 @app.route("/list", methods=["GET"])
 def list_downloads():
