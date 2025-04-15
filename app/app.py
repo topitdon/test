@@ -5,7 +5,9 @@ import os
 
 app = Flask(__name__)
 # ✅ สำหรับแบบปลอดภัย: ระบุ extension origin โดยตรง
-CORS(app, origins=["chrome-extension://ehjcafcgkaehoaakilgamgamnalgahhl"])
+# CORS(app, origins=["chrome-extension://ehjcafcgkaehoaakilgamgamnalgahhl"])
+# แบบไม่ปลอดภัยเท่าไหร่ ขี้เกียจเช็ค extension id
+CORS(app)
 DOWNLOAD_DIR = "/app/downloads"
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
